@@ -1,5 +1,5 @@
 {
-  "name": "my-node-project",
+  "name": "my-test-project",
   "version": "1.0.0",
   "description": "Proyecto básico de Node.js para CI/CD",
   "main": "src/app.js",
@@ -19,3 +19,5 @@
     "supertest": "^6.3.0"
   }
 }
+
+
