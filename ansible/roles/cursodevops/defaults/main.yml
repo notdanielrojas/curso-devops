@@ -1,0 +1,14 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for cursodevops
+
+# mysql_docker/defaults/main.yml
+mysql_image: mysql:8.0
+mysql_container_name: mysql_server
+mysql_root_password: rootpassword
+mysql_database: testdb
+mysql_user: testuser
+mysql_user_password: testuserpassword
+mysql_host_port: 3306
+mysql_container_port: 3306
+docker_host: unix:///Users/iolivaresh/Library/Containers/com.docker.docker/Data/docker-cli.sock

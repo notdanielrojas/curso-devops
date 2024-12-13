@@ -1,0 +1,10 @@
+---
+- name: Usando variables
+  hosts: node2,node1
+  vars:
+    app_port: 8080
+  tasks:
+    - name: Crear archivo con variables
+      copy:
+        content: "El servidor se ejecuta en el puerto {{ app_port }}"
+        dest: /root/configuracion.txt

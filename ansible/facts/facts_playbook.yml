@@ -1,0 +1,11 @@
+---
+- name: Usando facts
+  hosts: all
+  tasks:
+    - name: update and upgrade packages
+      shell: apt update && apt upgrade -y
+    - name: install iproute2
+      shell: apt install iproute2 -y
+    - name: Mostrar información del nodo
+      debug:
+       msg: "El nodo {{ ansible_host }} tiene IP {{ ansible_default_ipv4.address }}"

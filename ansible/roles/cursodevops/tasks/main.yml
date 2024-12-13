@@ -1,0 +1,37 @@
+# mysql_docker/tasks/main.yml
+---
+- name: Instalar Docker (si no está presente)
+  community.general.homebrew:
+    name: docker
+    state: present
+
+- name: Asegurarse de que Docker esté corriendo
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Descargar la imagen de MySQL
+  docker_image:
+    name: "{{ mysql_image }}"
+    source: pull
+
+- name: Crear y configurar el contenedor de MySQL
+  docker_container:
+    name: "{{ mysql_container_name }}"
+    image: "{{ mysql_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ mysql_host_port }}:{{ mysql_container_port }}"
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_DATABASE: "{{ mysql_database }}"
+      MYSQL_USER: "{{ mysql_user }}"
+      MYSQL_PASSWORD: "{{ mysql_user_password }}"
+
+- name: Esperar a que el contenedor MySQL esté listo
+  wait_for:
+    port: "{{ mysql_host_port }}"
+    timeout: 30
+    state: started

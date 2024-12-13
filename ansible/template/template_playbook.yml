@@ -1,0 +1,25 @@
+---
+- name: Configurar servidor Nginx con template
+  hosts: all
+  become: yes
+  vars:
+    server_port: 80
+    log_level: warn
+    web_root: /var/www/html
+    server_name: localhost
+  tasks:
+    - name: Recolectar facts del sistema
+      setup:
+
+    - name: install nginx
+      shell: apt install nginx -y
+
+    - name: Crear archivo de configuración de Nginx desde template
+      template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+
+    - name: Reiniciar Nginx para aplicar cambios
+      shell: sudo /etc/init.d/nginx restart
+
+

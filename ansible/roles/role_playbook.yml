@@ -1,0 +1,7 @@
+---
+- name: Desplegar servidor MySQL en Docker
+  hosts: localhost
+  vars:
+    docker_host: unix:///Users/iolivaresh/Library/Containers/com.docker.docker/Data/docker-cli.sock
+  roles:
+    - cursodevops

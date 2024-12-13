@@ -1,0 +1,12 @@
+---
+- name: Configure Docker Managed Nodes
+  hosts: all
+  become: false
+  tasks:
+    - name: Update and upgrade packages
+      shell: apt update && apt upgrade -y
+
+    - name: Create a file with Ansible
+      copy:
+        dest: /root/info.txt
+        content: "This file was created by Ansible on {{ ansible_hostname }}."

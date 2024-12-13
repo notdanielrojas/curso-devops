@@ -1,0 +1,38 @@
+---
+- name: Configurar servidor web Nginx
+  hosts: node1
+  become: yes
+  tasks:
+    - name: Instalar Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Asegurarse de que Nginx esté en ejecución
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Crear una página HTML personalizada
+      copy:
+        content: |
+          <html>
+            <head><title>Prueba de Nginx DevOps Ansible</title></head>
+            <body><h1>¡Servidor OK para Curso DevOps!</h1></body>
+          </html>
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Verificar que Nginx esté escuchando en el puerto 80
+      wait_for:
+        port: 80
+        timeout: 30
+        state: started
+
+    - name: Verificar disponibilidad del servidor web
+      uri:
+        url: http://localhost:80
+        status_code: 200
+
