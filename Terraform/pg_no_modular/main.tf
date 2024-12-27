@@ -3,19 +3,19 @@ provider "aws" {
   region = var.aws_region
   profile = "desafiolatam"
 }
+
 locals {
   instance_name = "ec2-instance-curso-devops"
-  region        = "us-east-1"
+  internet_gw_name = "igw-curso-devops"
 }
 
+/*
 # Obtención de una AMI existente utilizando Data
 data "aws_ami" "latest_amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-  filters = {
-    name = "amzn2-ami-hvm-*-x86_64-gp2"
-  }
+  id = "ami-0ca9fb66e076a6e32"
 }
+*/
+
 
 # Creación de la VPC
 resource "aws_vpc" "main_vpc" {
@@ -32,6 +32,29 @@ resource "aws_subnet" "main_subnet" {
   map_public_ip_on_launch = true
 }
 
+resource "aws_internet_gateway" "gw_curso_devops" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  tags = {
+    Name = local.internet_gw_name
+  }
+}
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.main_vpc.id
+}
+
+resource "aws_route" "route_internet_access" {
+  route_table_id = aws_route_table.public_route_table.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.gw_curso_devops.id
+}
+
+resource "aws_route_table_association" "public_subnet_association" {
+  subnet_id = aws_subnet.main_subnet.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
 # Creación de un Bucket S3
 resource "aws_s3_bucket" "example_bucket" {
   bucket = var.s3_bucket_name
@@ -42,7 +65,7 @@ resource "aws_s3_bucket" "example_bucket" {
 
 # Creación de una instancia EC2 usando la AMI obtenida
 resource "aws_instance" "example_instance" {
-  ami           = data.aws_ami.latest_amazon_linux.id
+  ami           = "ami-0ca9fb66e076a6e32"
   instance_type = var.instance_type
   subnet_id     = aws_subnet.main_subnet.id
   key_name      = var.key_name
@@ -52,17 +75,15 @@ resource "aws_instance" "example_instance" {
 
   associate_public_ip_address = true
 
-  security_groups = [aws_security_group.instance_sg.name]
+  security_groups = [aws_security_group.instance_sg.id]
 
-  monitoring {
-    enabled = true
-  }
 }
 
 # Definición de un grupo de seguridad para la instancia EC2
 resource "aws_security_group" "instance_sg" {
-  name        = "instance_sg"
+  name        = "sgp-terraform-curso-devops"
   description = "Security group for EC2 instance"
+  vpc_id = aws_vpc.main_vpc.id
 
   ingress {
     from_port   = 22
@@ -79,12 +100,23 @@ resource "aws_security_group" "instance_sg" {
   }
 }
 
+
 # Salida del ID de la instancia EC2 creada
 output "instance_id" {
   value = aws_instance.example_instance.id
 }
 
 # Salida de la URL del bucket S3
-output "s3_bucket_url" {
-  value = aws_s3_bucket.example_bucket.bucket
+output "s3_bucket" {
+  value = aws_s3_bucket.example_bucket.arn
+}
+
+# Salida del ARN VPC
+output "vpc_id" {
+  value = aws_vpc.main_vpc.arn
+}
+
+# Salida del ARN SubNet
+output "subnet_id" {
+  value = aws_subnet.main_subnet.arn
 }

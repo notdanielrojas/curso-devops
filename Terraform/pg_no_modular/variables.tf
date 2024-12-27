@@ -20,7 +20,7 @@ variable "subnet_cidr_block" {
 variable "subnet_availability_zone" {
   description = "La zona de disponibilidad para la subred"
   type        = string
-  default     = "us-west-2a"
+  default     = "us-east-1a"
 }
 
 variable "instance_type" {
@@ -36,5 +36,10 @@ variable "s3_bucket_name" {
 
 variable "key_name" {
   description = "El nombre de la clave SSH para la instancia EC2"
+  type        = string
+}
+
+variable "route_table_id" {
+  description = "El ID de la route table"
   type        = string
 }
