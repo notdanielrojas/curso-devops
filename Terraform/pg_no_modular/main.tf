@@ -1,7 +1,7 @@
 # Proveedor de AWS
 provider "aws" {
   region = var.aws_region
-  profile = "desafiolatam"
+  #profile = "desafiolatam"
 }
 
 locals {
