@@ -3,6 +3,8 @@ on: [push, pull_request]
 jobs:
   snyk-scan:
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
