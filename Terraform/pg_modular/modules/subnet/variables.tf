@@ -8,7 +8,7 @@ variable "subnet_cidr_block" {
   type        = string
 }
 
-variable "region" {
-  description = "La región de AWS"
+variable "subnet_availability_zone" {
+  description = "Zona de disponibildiad Subnet"
   type        = string
 }

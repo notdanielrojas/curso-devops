@@ -1,4 +1,4 @@
 locals {
-  instance_name = "ec2-instance-curso-devops"
-  region        = "us-east-1"
+  instance_name    = "ec2-instance-curso-devops"
+  internet_gw_name = "igw-curso-devops"
 }

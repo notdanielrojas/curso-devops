@@ -1,17 +1,26 @@
-# Salidas
+/*
+# Salida del ID de la instancia EC2 creada
 output "instance_id" {
-  value = module.ec2.instance_id
+  value = aws_instance.example_instance.id
 }
 
-output "vpc" {
-  value = data.aws_vpc.vpc.id
-}
-
-output "subnet" {
-  value = data.aws_subnet.vpc_subnets.id
+# Salida de la URL del bucket S3
+output "s3_bucket" {
+  value = aws_s3_bucket.example_bucket.arn
 }
 
 
-output "ami_ec2" {
-  value = data.aws_ami.latest_amazon_linux.id
+ */
+# Salida del ARN VPC
+output "vpc_id" {
+  value = module.vpc.vpc_id
 }
+
+/*
+# Salida del ARN SubNet
+output "subnet_id" {
+  value = aws_subnet.main_subnet.arn
+}
+
+
+ */
