@@ -1,0 +1,16 @@
+name: Snyk Scan
+on: [push, pull_request]
+jobs:
+  snyk-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Snyk
+        run: npm install -g snyk
+      - name: Run Snyk Test Java
+        run: snyk test ./snyk/java
+      - name: Run Snyk Test javascripts
+        run: snyk test ./snyk/javascripts
+      - name: Run Snyk Test python
+        run: snyk test ./snyk/python
