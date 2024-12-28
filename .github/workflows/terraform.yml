@@ -19,14 +19,11 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Directorio
-        run: cd ./Terraform/pg_no_modular
-
       - name: Terraform Init
-        run: terraform init
+        run: terraform -chdir="./Terraform/pg_no_modular" init
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform -chdir="./Terraform/pg_no_modular" plan
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
