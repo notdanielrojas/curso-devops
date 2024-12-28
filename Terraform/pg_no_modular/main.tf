@@ -65,6 +65,7 @@ resource "aws_s3_bucket" "example_bucket" {
 
 # Creación de una instancia EC2 usando la AMI obtenida
 resource "aws_instance" "example_instance" {
+  depends_on    = [aws_vpc.main_vpc,aws_security_group.instance_sg]
   ami           = "ami-0ca9fb66e076a6e32"
   instance_type = var.instance_type
   subnet_id     = aws_subnet.main_subnet.id
