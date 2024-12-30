@@ -3,6 +3,8 @@ on: [push, pull_request]
 jobs:
   snyk-scan-node:
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -14,12 +16,12 @@ jobs:
       - name: Install dependencies
         run: cd ./snyk/javascripts && npm install
 
+      - name: Install Snyk
+        run: npm install -g snyk
+
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --directory=./snyk/javascripts
+        run: cd ./snyk/javascripts && snyk test --severity-threshold=high
+
   snyk-scan-java:
     runs-on: ubuntu-latest
     steps:
