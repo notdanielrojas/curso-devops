@@ -1,18 +1,33 @@
 name: Snyk Scan
 on: [push, pull_request]
 jobs:
-  snyk-scan:
+  snyk-scan-python:
     runs-on: ubuntu-latest
-    env:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Install Snyk
-        run: npm install -g snyk
-      - name: Run Snyk Test Java
-        run: snyk test ./snyk/java
-      - name: Run Snyk Test javascripts
-        run: snyk test ./snyk/javascripts
-      - name: Run Snyk Test python
-        run: snyk test ./snyk/python
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python-3.10@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --directory=./snyk/python
+  snyk-scan-node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --directory=./snyk/javascripts
+  snyk-scan-java:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven-3-jdk-11@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --directory=./snyk/java

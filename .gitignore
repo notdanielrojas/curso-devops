@@ -6,3 +6,6 @@
 .terraform.*
 **/terraform.tfstate
 **/terraform.tfstate.backup
+/snyk/javascripts/node_modules/
+/snyk/python/path/
+/snyk/javascripts/package-lock.json
