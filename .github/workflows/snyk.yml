@@ -12,7 +12,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies
-        run: ./snyk/javascripts/npm install
+        run: cd ./snyk/javascripts && npm install
 
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
