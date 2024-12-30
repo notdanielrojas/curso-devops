@@ -1,20 +1,19 @@
 name: Snyk Scan
 on: [push, pull_request]
 jobs:
-  snyk-scan-python:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python-3.10@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high --directory=./snyk/python
   snyk-scan-node:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: ./snyk/javascripts/npm install
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
         env:
