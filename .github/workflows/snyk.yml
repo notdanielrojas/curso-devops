@@ -19,9 +19,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -r ./snyk/python/requirements.txt
-
-      - name: Install Snyk
-        run: pip install snyk
+          pip3 install snyk
 
       - name: Run Snyk to check for vulnerabilities
         run: cd ./snyk/python && snyk test
