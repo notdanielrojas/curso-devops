@@ -24,11 +24,22 @@ jobs:
 
   snyk-scan-java:
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
-      - uses: actions/checkout@master
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/maven-3-jdk-11@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          args: --severity-threshold=high --directory=./snyk/java
+          node-version: '22'
+
+      - name: Install dependencies
+        run: cd ./snyk/java && npm install
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Run Snyk to check for vulnerabilities
+        run: cd ./snyk/java && snyk test --severity-threshold=high
+
