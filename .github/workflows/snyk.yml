@@ -1,18 +1,68 @@
 name: Snyk Scan
 on: [push, pull_request]
 jobs:
-  snyk-scan:
+  snyk-scan-python:
     runs-on: ubuntu-latest
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'  # O la versión de Python que prefieras
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r ./snyk/python/requirements.txt
+          pip3 install snyk
+
+      - name: Run Snyk to check for vulnerabilities
+        run: cd ./snyk/python && snyk test
+
+  snyk-scan-node:
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: cd ./snyk/javascripts && npm install
+
       - name: Install Snyk
         run: npm install -g snyk
-      - name: Run Snyk Test Java
-        run: snyk test ./snyk/java
-      - name: Run Snyk Test javascripts
-        run: snyk test ./snyk/javascripts
-      - name: Run Snyk Test python
-        run: snyk test ./snyk/python
+
+      - name: Run Snyk to check for vulnerabilities
+        run: cd ./snyk/javascripts && snyk test
+
+  snyk-scan-java:
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: cd ./snyk/java && npm install
+
+      - name: Install Snyk
+        run: npm install -g snyk
+
+      - name: Run Snyk to check for vulnerabilities
+        run: cd ./snyk/java && snyk test
+
