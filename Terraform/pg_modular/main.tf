@@ -4,7 +4,6 @@ provider "aws" {
   profile = "desafiolatam"
 }
 
-
 # Módulo VPC
 module "vpc" {
   source         = "./modules/vpc"
